@@ -1,14 +1,31 @@
 return {
-    { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-        config = function()
-            require("catppuccin").setup({
-                transparent_background = true,
-            })
-            vim.cmd.colorscheme "catppuccin"
-        end
-    }
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    priority = 1000, 
+    config = function()
+      vim.opt.background = "dark"
+      vim.cmd("colorscheme oxocarbon")
+
+      local groups = {
+        "Normal",   
+        "NormalNC",  
+        "NormalFloat",
+        "FloatBorder",
+        "SignColumn", 
+        "LineNr",      
+        "CursorLineNr", 
+        "EndOfBuffer",   
+
+        "NvimTreeNormal",
+        "NvimTreeNormalNC",
+        "NvimTreeWinSeparator",
+        "TelescopeNormal",
+        "TelescopeBorder",
+      }
+
+      for _, group in ipairs(groups) do
+        vim.api.nvim_set_hl(0, group, { bg = "none" })
+      end
+    end,
+  },
 }
