@@ -13,8 +13,8 @@ return {
           "lua_ls",
           "clangd",
           "asm_lsp",
-          "cmake",
           "jsonls",
+          "pyright",
         },
         handlers = {
           function(server_name)
@@ -23,6 +23,22 @@ return {
               on_attach = on_attach,
             })
           end,
+          ["pyright"] = function()
+                require("lspconfig").pyright.setup({
+                    capabilities = capabilities,
+                    settings = {
+                        python = {
+                            analysis = {
+                                typeCheckingMode = "off",
+                                diagnosticSeverityOverrides = {
+                                    reportGeneralTypeIssues = "none",
+                                    reportOptionalMemberAccess = "none",
+                                },
+                            },
+                        },
+                    },
+                })
+            end,
         },
       })
     end,
