@@ -48,3 +48,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
     keymap.set('n', '<S-gd>', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'LSP: Idź do definicji' })
   end,
 })
+
+keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
