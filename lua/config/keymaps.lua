@@ -50,3 +50,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+
+-- Szukanie symboli w aktualnym pliku (np. listy funkcji w Pythonie/C++)
+keymap.set('n', '<leader>fs', require('telescope.builtin').lsp_document_symbols, { desc = 'Szukaj symboli w pliku' })
+
+-- Szukanie symboli w całym projekcie
+keymap.set('n', '<leader>fS', require('telescope.builtin').lsp_dynamic_workspace_symbols, { desc = 'Szukaj symboli w projekcie' })
+
+-- Szukanie miejsc, gdzie używana jest dana funkcja/zmienna
+keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = 'LSP: Pokaż referencje' })
+
+-- Szybki skok do implementacji i typu
+keymap.set('n', 'gi', require('telescope.builtin').lsp_implementations, { desc = 'LSP: Idź do implementacji' })
+keymap.set('n', 'go', require('telescope.builtin').lsp_type_definitions, { desc = 'LSP: Definicja typu' })

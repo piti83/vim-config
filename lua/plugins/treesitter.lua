@@ -8,9 +8,9 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       ensure_installed = {
-        "lua", "vim", "vimdoc", "bash", "python", "c", "cpp",
-        "css", "json",
+         "lua", "vim", "vimdoc", "bash", "python", "c", "cpp", "java", "css", "json",
         "markdown", "markdown_inline", "query", "regex", "yaml", "toml"
+      },
       },
       highlight = { enable = true },
       indent = { enable = true },

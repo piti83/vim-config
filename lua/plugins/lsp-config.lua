@@ -15,6 +15,8 @@ return {
           "asm_lsp",
           "jsonls",
           "pyright",
+          "bashls",
+          "jdtls"
         },
         handlers = {
           function(server_name)
