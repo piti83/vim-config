@@ -11,7 +11,6 @@ return {
          "lua", "vim", "vimdoc", "bash", "python", "c", "cpp", "java", "css", "json",
         "markdown", "markdown_inline", "query", "regex", "yaml", "toml"
       },
-      },
       highlight = { enable = true },
       indent = { enable = true },
       incremental_selection = {
@@ -29,4 +28,3 @@ return {
     end,
   },
 }
-

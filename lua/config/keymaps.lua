@@ -1,65 +1,58 @@
 local keymap = vim.keymap
 
-keymap.set("n", "<leader>h", "<cmd>noh<CR>", { desc = "Wyczyść podświetlenie wyszukiwania" })
+-- ==========================================
+-- GENERAL & NAVIGATION
+-- ==========================================
+keymap.set("n", "<leader>h", "<cmd>noh<CR>", { desc = "Clear search highlight" })
 
-keymap.set("n", "[b", ":bprevious<CR>", { desc = "Poprzedni bufor" })
-keymap.set("n", "]b", ":bnext<CR>", { desc = "Następny bufor" })
+keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
+-- ==========================================
+-- BUFFER MANAGEMENT
+-- ==========================================
+keymap.set("n", "[b", ":bprevious<CR>", { desc = "Previous buffer" })
+keymap.set("n", "]b", ":bnext<CR>", { desc = "Next buffer" })
+-- Close buffer without closing the window (preserves layout)
+keymap.set("n", "<leader>c", "<cmd>bprevious <bar> bdelete #<CR>", { desc = "Close current buffer" })
 
-keymap.set("n", "<leader>c", function()
-  vim.cmd("bdelete")
+-- ==========================================
+-- FILE EXPLORER (Oil)
+-- ==========================================
+keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory (Oil)" })
 
-  local current_buf = vim.api.nvim_get_current_buf()
-  local current_ft = vim.api.nvim_get_option_value('filetype', { buf = current_buf })
+-- ==========================================
+-- TELESCOPE (Fuzzy Finder)
+-- ==========================================
+local builtin = require('telescope.builtin')
+keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
+keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep (search text)' })
+keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find in open buffers' })
+keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help tags' })
+keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Fuzzy find in current buffer' })
 
-  if current_ft == 'NvimTree' then
-    vim.cmd("bnext")
-
-    local after_bnext_buf = vim.api.nvim_get_current_buf()
-    local after_bnext_ft = vim.api.nvim_get_option_value('filetype', { buf = after_bnext_buf })
-
-    if after_bnext_ft == 'NvimTree' then
-      vim.cmd("enew") 
-    end
-  end
-end, { desc = "Zamknij bufor" })
-
--- Nvim-Tree
-keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Pokaż/Ukryj eksplorator plików" })
-keymap.set("n", "<C-h>", function() vim.cmd.wincmd("h") end, { desc = "Idź do okna po lewej" })
-keymap.set("n", "<C-l>", function() vim.cmd.wincmd("l") end, { desc = "Idź do okna po prawej" })
-
--- Telescope 
-keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = 'Szukaj plików' })
-keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = 'Szukaj tekstu w projekcie' })
-keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, { desc = 'Szukaj w otwartych buforach' })
-keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, { desc = 'Szukaj w pomocy' })
-
-keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find, { desc = 'Szukaj w bieżącym pliku' })
-
--- Conform
+-- ==========================================
+-- LSP & FORMATTING (Conform)
+-- ==========================================
 keymap.set({ "n", "v" }, "<leader>f", function()
   require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "Formatuj plik" })
+end, { desc = "Format file" })
 
+keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+keymap.set('n', '<leader>fs', builtin.lsp_document_symbols, { desc = 'Find document symbols' })
+keymap.set('n', '<leader>fS', builtin.lsp_dynamic_workspace_symbols, { desc = 'Find workspace symbols' })
+keymap.set('n', 'gr', builtin.lsp_references, { desc = 'LSP: Go to references' })
+keymap.set('n', 'gi', builtin.lsp_implementations, { desc = 'LSP: Go to implementation' })
+keymap.set('n', 'go', builtin.lsp_type_definitions, { desc = 'LSP: Go to type definition' })
+
+-- Dynamic LSP keymaps (attached only when LSP server is active for the buffer)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
-    keymap.set('n', '<S-gd>', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'LSP: Idź do definicji' })
+    keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'LSP: Go to definition' })
+    keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = ev.buf, desc = 'LSP: Show documentation (Hover)' })
+    keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = ev.buf, desc = 'LSP: Rename symbol' })
   end,
 })
-
-keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
-
--- Szukanie symboli w aktualnym pliku (np. listy funkcji w Pythonie/C++)
-keymap.set('n', '<leader>fs', require('telescope.builtin').lsp_document_symbols, { desc = 'Szukaj symboli w pliku' })
-
--- Szukanie symboli w całym projekcie
-keymap.set('n', '<leader>fS', require('telescope.builtin').lsp_dynamic_workspace_symbols, { desc = 'Szukaj symboli w projekcie' })
-
--- Szukanie miejsc, gdzie używana jest dana funkcja/zmienna
-keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = 'LSP: Pokaż referencje' })
-
--- Szybki skok do implementacji i typu
-keymap.set('n', 'gi', require('telescope.builtin').lsp_implementations, { desc = 'LSP: Idź do implementacji' })
-keymap.set('n', 'go', require('telescope.builtin').lsp_type_definitions, { desc = 'LSP: Definicja typu' })
