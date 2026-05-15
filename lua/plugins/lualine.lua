@@ -7,7 +7,7 @@ return {
       theme = 'auto',
       component_separators = { left = '', right = '' },
       section_separators = { left = '', right = '' },
-      disabled_filetypes = {}, -- Prawidłowa wartość to pusta tabela
+      disabled_filetypes = {},
       always_show_tabline = true,
       globalstatus = false,
     },
