@@ -34,6 +34,14 @@ keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help tags' })
 keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = 'Fuzzy find in current buffer' })
 
 -- ==========================================
+-- FIND AND REPLACE (Spectre)
+-- ==========================================
+keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', { desc = "Toggle Search/Replace Panel" })
+keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', { desc = "Search current word" })
+keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', { desc = "Search selected text" })
+keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', { desc = "Search in current file" })
+
+-- ==========================================
 -- LSP & FORMATTING (Conform)
 -- ==========================================
 keymap.set({ "n", "v" }, "<leader>f", function()
