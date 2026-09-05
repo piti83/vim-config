@@ -1,10 +1,18 @@
 return {
-  {
-    "tanvirtin/monokai.nvim",
-    priority = 1000, 
-    config = function()
-      vim.opt.background = "dark"
-      vim.cmd("colorscheme monokai")
-    end,
-  },
+    {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000,
+        config = function()
+            require("gruvbox").setup({
+                italic = {
+                    strings = false,
+                    emphasis = false,
+                    comments = false,
+                    operators = false,
+                    folds = false,
+                },
+            })
+            vim.cmd("colorscheme gruvbox")
+        end,
+    }
 }
